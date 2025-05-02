@@ -2,11 +2,12 @@ import json
 import difflib
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+import os
 
-app = Flask(__name__, template_folder='templates')  # 👈 Ensures it looks in /templates
+app = Flask(__name__, template_folder='templates')
 CORS(app)
 
-# Load the catalog
+# Load the catalog from JSON
 def load_catalog():
     with open('catalog.json') as f:
         return json.load(f)
@@ -16,6 +17,7 @@ def search_by_title(title_query):
     catalog = load_catalog()
     titles = [book['title'] for book in catalog]
     close_matches = difflib.get_close_matches(title_query, titles, n=1, cutoff=0.5)
+
     if close_matches:
         match = close_matches[0]
         for book in catalog:
@@ -37,7 +39,7 @@ def search_by_author(author_query):
     else:
         return f"Sorry, I couldn't find any books by {author_query}."
 
-# Decide how to respond
+# Determine search type
 def search_book(user_input):
     if "by" in user_input.lower():
         author_query = user_input.lower().split("by")[1].strip()
@@ -45,21 +47,20 @@ def search_book(user_input):
     else:
         return search_by_title(user_input)
 
-# Route for the homepage
+# Route for the chat interface
 @app.route('/')
 def index():
-    return render_template('chat.html')  # 👈 Loads chat.html from /templates
+    return render_template('chat.html')
 
-# Chat route
+# Route for handling messages
 @app.route('/chat', methods=['POST'])
 def chat():
     user_input = request.json.get("message", "")
     response = search_book(user_input)
     return jsonify({"response": response})
 
-# Run the server
+# Run the app (Render-compatible)
 if __name__ == '__main__':
     print("Launching chatbot website...")
-    app.run(host='0.0.0.0', port=5000, debug=True)
-
-
+    port = int(os.environ.get("PORT", 5000))  # <-- This is what Render needs
+    app.run(host='0.0.0.0', port=port)
