@@ -1,47 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Library Chatbot</title>
+  <title>AI Library Chatbot</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
+      background: #e6f0ff;
+      padding: 30px;
+      color: #333;
     }
     h2 {
-      color: #333;
+      text-align: center;
+      color: #2b547e;
     }
     #chatbox {
       width: 100%;
-      height: 300px;
-      border: 1px solid #ccc;
-      background: #fff;
-      padding: 10px;
+      max-width: 700px;
+      height: 400px;
+      margin: 0 auto 20px auto;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
       overflow-y: scroll;
-      margin-bottom: 10px;
+    }
+    .user, .bot {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      width: fit-content;
+      max-width: 90%;
+      clear: both;
     }
     .user {
-      color: blue;
-      margin: 5px 0;
+      background: #d0e7ff;
+      align-self: flex-end;
+      float: right;
     }
     .bot {
-      color: green;
-      margin: 5px 0;
+      background: #d9ffd9;
+      float: left;
     }
     #userInput {
       width: 70%;
       padding: 10px;
+      margin-right: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
     #sendBtn {
       padding: 10px 20px;
+      border: none;
+      background: #2b547e;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h2>📚 AI Library Chatbot</h2>
+  <h2> AI Library Chatbot</h2>
   <div id="chatbox"></div>
-  <input type="text" id="userInput" placeholder="Type your message..." />
-  <button id="sendBtn">Send</button>
+  <div style="text-align: center;">
+    <input type="text" id="userInput" placeholder="Ask about a book..." />
+    <button id="sendBtn">Send</button>
+  </div>
 
   <script>
     const chatbox = document.getElementById("chatbox");
@@ -52,15 +75,11 @@
       const message = userInput.value.trim();
       if (!message) return;
 
-      // Show user's message
       chatbox.innerHTML += `<div class="user"><strong>You:</strong> ${message}</div>`;
 
-      // Send to live Flask backend
       fetch("https://ai-library-chatbot.onrender.com/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
       })
       .then(res => res.json())
@@ -69,10 +88,11 @@
         chatbox.scrollTop = chatbox.scrollHeight;
         userInput.value = "";
       })
-      .catch(error => {
-        chatbox.innerHTML += `<div class="bot"><strong>Bot:</strong> Sorry, something went wrong.</div>`;
+      .catch(() => {
+        chatbox.innerHTML += `<div class="bot"><strong>Bot:</strong> Sorry, I couldn’t reach the server.</div>`;
       });
     };
   </script>
 </body>
 </html>
+
