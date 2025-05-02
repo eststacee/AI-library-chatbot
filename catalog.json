@@ -1,0 +1,21 @@
+[
+    {
+      "title": "Things Fall Apart",
+      "author": "Chinua Achebe",
+      "location": "Shelf A1",
+      "available": true
+    },
+    {
+      "title": "The River and the Source",
+      "author": "Margaret Ogola",
+      "location": "Shelf A3",
+      "available": false
+    },
+    {
+      "title": "Dust",
+      "author": "Yvonne Adhiambo Owuor",
+      "location": "Shelf B1",
+      "available": true
+    }
+  ]
+  
