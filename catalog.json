@@ -1,21 +1,25 @@
 [
-    {
-      "title": "Things Fall Apart",
-      "author": "Chinua Achebe",
-      "location": "Shelf A1",
-      "available": true
-    },
-    {
-      "title": "The River and the Source",
-      "author": "Margaret Ogola",
-      "location": "Shelf A3",
-      "available": false
-    },
-    {
-      "title": "Dust",
-      "author": "Yvonne Adhiambo Owuor",
-      "location": "Shelf B1",
-      "available": true
-    }
-  ]
+  {
+    "title": "Things Fall Apart",
+    "author": "Chinua Achebe",
+    "location": "A1",
+    "available": true,
+    "genre": "fiction"
+  },
+  {
+    "title": "The River and the Source",
+    "author": "Margaret Ogola",
+    "location": "A3",
+    "available": false,
+    "genre": "fiction"
+  },
+  {
+    "title": "Kenyan History 101",
+    "author": "J. Mwangi",
+    "location": "B2",
+    "available": true,
+    "genre": "history"
+  }
+]
+
   

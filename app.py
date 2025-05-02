@@ -7,19 +7,19 @@ import os
 app = Flask(__name__, template_folder='templates')
 CORS(app)
 
-# Load the catalog from JSON
+# Load book catalog
 def load_catalog():
     with open('catalog.json') as f:
         return json.load(f)
 
-# Fuzzy title match
+# Fuzzy title search
 def search_by_title(title_query):
     catalog = load_catalog()
     titles = [book['title'] for book in catalog]
-    close_matches = difflib.get_close_matches(title_query, titles, n=1, cutoff=0.5)
+    matches = difflib.get_close_matches(title_query, titles, n=1, cutoff=0.5)
 
-    if close_matches:
-        match = close_matches[0]
+    if matches:
+        match = matches[0]
         for book in catalog:
             if book['title'] == match:
                 status = "available" if book['available'] else "not available"
@@ -30,37 +30,64 @@ def search_by_title(title_query):
 def search_by_author(author_query):
     catalog = load_catalog()
     results = []
+
     for book in catalog:
         if author_query.lower() in book['author'].lower():
             status = "available" if book['available'] else "not available"
             results.append(f"'{book['title']}' (Shelf: {book['location']}, {status})")
+
     if results:
         return f"Books by {author_query}:\n" + "\n".join(results)
     else:
         return f"Sorry, I couldn't find any books by {author_query}."
 
-# Determine search type
-def search_book(user_input):
-    if "by" in user_input.lower():
-        author_query = user_input.lower().split("by")[1].strip()
-        return search_by_author(author_query)
-    else:
-        return search_by_title(user_input)
+# Genre search
+def search_by_genre(genre_query):
+    catalog = load_catalog()
+    results = []
 
-# Route for the chat interface
+    for book in catalog:
+        if genre_query.lower() == book.get('genre', '').lower():
+            status = "available" if book['available'] else "not available"
+            results.append(f"'{book['title']}' by {book['author']} ({status}, Shelf: {book['location']})")
+
+    if results:
+        return f"Books in the '{genre_query}' genre:\n" + "\n".join(results)
+    else:
+        return f"Sorry, I couldn't find any books in the '{genre_query}' genre."
+
+# Decide how to respond
+def search_book(user_input):
+    user_input = user_input.lower()
+
+    # Check for genre
+    genres = ["fiction", "history", "science", "poetry", "technology", "religion"]
+    for genre in genres:
+        if genre in user_input:
+            return search_by_genre(genre)
+
+    # Check for author
+    if "by" in user_input:
+        author_query = user_input.split("by")[1].strip()
+        return search_by_author(author_query)
+
+    # Default to title
+    return search_by_title(user_input)
+
+# Serve frontend
 @app.route('/')
 def index():
     return render_template('chat.html')
 
-# Route for handling messages
+# Handle chatbot POST
 @app.route('/chat', methods=['POST'])
 def chat():
     user_input = request.json.get("message", "")
     response = search_book(user_input)
     return jsonify({"response": response})
 
-# Run the app (Render-compatible)
+# Launch server
 if __name__ == '__main__':
     print("Launching chatbot website...")
-    port = int(os.environ.get("PORT", 5000))  # <-- This is what Render needs
+    port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
