@@ -32,11 +32,12 @@ This project is a Python-based AI chatbot that helps users search for books in a
 
 ##  Live Demo
 
-- 🌐 [https://ai-library-chatbot.onrender.com](https://ai-library-chatbot.onrender.com)
+-  [https://ai-library-chatbot.onrender.com](https://ai-library-chatbot.onrender.com)
 
 ##  Example Inputs
 
-| User Input                   | Bot Response Example                          |
+| User Input                    | Bot Response Example                          |
+|------------------------------|-----------------------------------------------|
 | `river source`               | `'The River and the Source' by...`            |
 | `books by Chinua Achebe`     | List of books by that author                  |
 | `fiction books`              | All fiction books in the catalog              |
@@ -49,8 +50,8 @@ This project is a Python-based AI chatbot that helps users search for books in a
 3. Run app: `python app.py`
 4. Open `http://127.0.0.1:5000` in your browser
 
-##  Author
+##  Authors
 
-- **Name**: Stacey Nyongesa
+- **Name**: Elizabeth Mumbi,Stacey Nyongesa,Manasseh Ekidor,John Kariuki, David Onyango
 - **Course**: Business and Information Automation
-- **Institution**: The University of Nairobi
+- **Institution**: University Of Nairobi
